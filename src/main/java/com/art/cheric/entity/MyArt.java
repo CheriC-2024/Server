@@ -25,7 +25,7 @@ public class MyArt extends BaseTime {
     @Comment("소유 작품")
     private Art art;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @Comment("작품 소유자")
     private User user;
