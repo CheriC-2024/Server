@@ -26,8 +26,7 @@ public class Exhibition extends BaseTime {
     @Comment("전시 이름")
     private String name;
 
-
-    @Column(name = "name", length = 100, nullable = false, unique = true)
+    @Column(name = "description", length = 100, nullable = false, unique = true)
     @Comment("전시 설명")
     private String description;
 
@@ -47,7 +46,6 @@ public class Exhibition extends BaseTime {
         this.user = user;
         this.exhibitionArtList = exhibitionArtList;
     }
-
 
     @Override
     public boolean equals(Object obj) {
