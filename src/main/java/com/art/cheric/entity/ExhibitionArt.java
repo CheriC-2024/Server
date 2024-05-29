@@ -15,19 +15,25 @@ import java.util.Objects;
 @Table(name = "ExhibitionArt")
 @NoArgsConstructor
 @Getter
-public class ExhibitionArt  extends BaseTime {
+public class ExhibitionArt extends BaseTime {
     @Id
     @Column(name = "exhibition_art_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "exhibition_id", nullable = false)
+    @Comment("전시")
+    private Exhibition exhibition;
+
     @OneToOne
     @JoinColumn(name = "art_id", nullable = false)
-    @Comment("컬렉션 작품")
+    @Comment("전시 작품")
     private Art art;
 
     @Builder
-    public ExhibitionArt(Art art) {
+    public ExhibitionArt(Exhibition exhibition, Art art) {
+        this.exhibition = exhibition;
         this.art = art;
     }
 
