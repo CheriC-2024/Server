@@ -39,6 +39,19 @@ dependencies {
 
 	// junit
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// querydsl
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+
+	// image upload
+	implementation "commons-io:commons-io:2.11.0"
+
+	// model_mapper
+	implementation "org.modelmapper:modelmapper:2.3.9"
 }
 
 tasks.named('test') {
