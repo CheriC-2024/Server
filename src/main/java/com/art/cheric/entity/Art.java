@@ -6,9 +6,12 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,6 +28,9 @@ public class Art extends BaseTime {
     @Column(name = "name", length = 50, nullable = false)
     @Comment("작품 이름")
     private String name;
+
+    @OneToMany(mappedBy = "art", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
 
     @Column(name = "series", length = 30)
     @Comment("작품 시리즈")
@@ -46,7 +52,7 @@ public class Art extends BaseTime {
     @Comment("작품 사용 재료")
     private MaterialSort materialStatus;
 
-    @Column(name = "materialStatus", nullable = false)
+    @Column(name = "artStatus", nullable = false)
     @Comment("작품 사용 권한")
     @Enumerated(EnumType.STRING)
     private ArtStatus artStatus;
@@ -55,11 +61,17 @@ public class Art extends BaseTime {
     @Comment("작품 이용 주의사항")
     private String notice;
 
+    @Column(name = "cherryNum", nullable = false)
+    @Comment("체리 가격")
+    @ColumnDefault("0")
+    private int cherryNum;
+
     @Builder
-    public Art(String name, String series, String description,
+    public Art(String name, List<Image> images, String series, String description,
                Integer widthSize, Integer heightSize, MaterialSort materialStatus,
-               ArtStatus artStatus, String notice, boolean isSomeoneOwn) {
+               ArtStatus artStatus, String notice, int cherryNum) {
         this.name = name;
+        this.images = images;
         this.series = series;
         this.description = description;
         this.widthSize = widthSize;
@@ -67,6 +79,7 @@ public class Art extends BaseTime {
         this.materialStatus = materialStatus;
         this.artStatus = artStatus;
         this.notice = notice;
+        this.cherryNum = cherryNum;
     }
 
     @Override
