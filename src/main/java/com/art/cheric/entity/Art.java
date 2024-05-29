@@ -82,6 +82,14 @@ public class Art extends BaseTime {
         this.cherryNum = cherryNum;
     }
 
+    public Art addImage(Image image) {
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
+        this.images.add(image);
+        return this;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
