@@ -20,13 +20,19 @@ public class CollectionArt extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "collection_id", nullable = false)
+    @Comment("컬렉션")
+    private Collection collection;
+
     @OneToOne
     @JoinColumn(name = "art_id", nullable = false)
     @Comment("컬렉션 작품")
     private Art art;
 
     @Builder
-    public CollectionArt(Art art) {
+    public CollectionArt(Collection collection, Art art) {
+        this.collection = collection;
         this.art = art;
     }
 
