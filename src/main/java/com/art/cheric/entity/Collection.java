@@ -31,7 +31,7 @@ public class Collection extends BaseTime {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @Comment("컬렉션 제작자")
     private User user;
 
@@ -45,6 +45,13 @@ public class Collection extends BaseTime {
         this.description = description;
         this.user = user;
         this.collectionArtList = collectionArtList;
+    }
+
+    public void addCollectionArt(CollectionArt collectionArt) {
+        if (this.collectionArtList == null) {
+            this.collectionArtList = new ArrayList<>();
+        }
+        this.collectionArtList.add(collectionArt);
     }
 
     @Override
