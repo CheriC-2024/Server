@@ -21,12 +21,12 @@ public class MyArt extends BaseTime {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "art_id", nullable = false)
+    @JoinColumn(name = "art_id")
     @Comment("소유 작품")
     private Art art;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @Comment("작품 소유자")
     private User user;
 

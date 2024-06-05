@@ -22,12 +22,12 @@ public class ExhibitionArt extends BaseTime {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "exhibition_id", nullable = false)
+    @JoinColumn(name = "exhibition_id")
     @Comment("전시")
     private Exhibition exhibition;
 
     @OneToOne
-    @JoinColumn(name = "art_id", nullable = false)
+    @JoinColumn(name = "art_id")
     @Comment("전시 작품")
     private Art art;
 

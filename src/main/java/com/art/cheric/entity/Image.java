@@ -19,8 +19,8 @@ public class Image extends BaseTime {
     @Column(name = "image_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "art_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "art_id")
     @Comment("작품")
     private Art art;
 

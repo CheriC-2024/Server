@@ -31,7 +31,7 @@ public class Exhibition extends BaseTime {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @Comment("전시 제작자")
     private User user;
 
