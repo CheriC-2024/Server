@@ -17,8 +17,8 @@ import java.util.Objects;
 @Entity
 @EntityListeners(value = {AuditingEntityListener.class})
 @Table(name = "Art")
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor
 public class Art extends BaseTime {
     @Id
     @Column(name = "art_id")
@@ -30,7 +30,7 @@ public class Art extends BaseTime {
     private String name;
 
     @OneToMany(mappedBy = "art", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
-    private List<Image> images = new ArrayList<>();
+    private List<Image> imageList = new ArrayList<>();
 
     @Column(name = "series", length = 30)
     @Comment("작품 시리즈")
@@ -48,11 +48,11 @@ public class Art extends BaseTime {
     @Comment("작품 세로 사이즈")
     private Integer heightSize;
 
-    @Column(name = "materialStatus", nullable = false)
+    @Column(name = "materialStatus")
     @Comment("작품 사용 재료")
     private MaterialSort materialStatus;
 
-    @Column(name = "artStatus", nullable = false)
+    @Column(name = "artStatus")
     @Comment("작품 사용 권한")
     @Enumerated(EnumType.STRING)
     private ArtStatus artStatus;
@@ -67,11 +67,11 @@ public class Art extends BaseTime {
     private int cherryNum;
 
     @Builder
-    public Art(String name, List<Image> images, String series, String description,
+    public Art(String name, List<Image> imageList, String series, String description,
                Integer widthSize, Integer heightSize, MaterialSort materialStatus,
                ArtStatus artStatus, String notice, int cherryNum) {
         this.name = name;
-        this.images = images;
+        this.imageList = imageList;
         this.series = series;
         this.description = description;
         this.widthSize = widthSize;
@@ -82,12 +82,15 @@ public class Art extends BaseTime {
         this.cherryNum = cherryNum;
     }
 
-    public Art addImage(Image image) {
-        if (this.images == null) {
-            this.images = new ArrayList<>();
+    public void addImageList(List<Image> imageList) {
+        this.imageList.addAll(imageList);
+    }
+
+    public void addImage(Image image) {
+        if (this.imageList == null) {
+            this.imageList = new ArrayList<>();
         }
-        this.images.add(image);
-        return this;
+        this.imageList.add(image);
     }
 
     @Override
