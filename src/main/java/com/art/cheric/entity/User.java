@@ -1,7 +1,7 @@
 package com.art.cheric.entity;
 
+import com.art.cheric.constant.PartSort;
 import com.art.cheric.constant.Role;
-import com.art.cheric.dto.UserCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Objects;
 
 @Entity
-@EntityListeners(value = {AuditingEntityListener.class})
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "User")
 @NoArgsConstructor
 @Getter
@@ -42,7 +42,17 @@ public class User extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     @Comment("사용자 권한")
+    @ColumnDefault("'COLLECTOR'")
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "partSort", nullable = false)
+    @Comment("사용자 선호 장르")
+    private PartSort partSort;
+
+    @Column(name = "isAlreadyCollector", nullable = false)
+    @Comment("컬렉팅 경험 여부")
+    private Boolean isAlreadyCollector;
 
     // TODO: 체리 구매까지 확장되면 어떻게 할지 더 고민하기
     @Column(name = "cherry", nullable = false)
@@ -51,24 +61,27 @@ public class User extends BaseTime {
     private int cherry;
 
     @Builder
-    public User(String email, String name, String profileImg, String profileImgPath, Role role, int cherry) {
+    public User(String email, String name, String profileImg, String profileImgPath, Role role, PartSort partSort, int cherry, Boolean isAlreadyCollector) {
         this.email = email;
         this.name = name;
         this.profileImg = profileImg;
         this.profileImgPath = profileImgPath;
-        this.role = role;
+        this.role = (role != null) ? role : Role.COLLECTOR;
         this.cherry = cherry;
+        this.partSort = partSort;
+        this.isAlreadyCollector = isAlreadyCollector;
     }
 
-    public static User createUser(UserCreateRequestDto userCreateRequestDto) {
-        return User.builder()
-                .name(userCreateRequestDto.getName())
-                .email(userCreateRequestDto.getEmail())
-                .profileImg(userCreateRequestDto.getProfileImg())
-                .profileImgPath(userCreateRequestDto.getProfileImgPath())
-                .role(userCreateRequestDto.getRole())
-                .cherry(userCreateRequestDto.getCherry())
-                .build();
+    public void updateRole(Role role) {
+        this.role = role;
+    }
+
+    public void minusCherry(int cherry) {
+        this.cherry -= cherry;
+    }
+
+    public void plusCherry(int cherry) {
+        this.cherry += cherry;
     }
 
     @Override
