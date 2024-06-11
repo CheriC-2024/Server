@@ -2,6 +2,7 @@ package com.art.cheric.dto.art.request;
 
 import com.art.cheric.constant.MaterialSort;
 import com.art.cheric.constant.PartSort;
+import com.art.cheric.constant.Role;
 import com.art.cheric.entity.Art;
 import lombok.Getter;
 
@@ -19,6 +20,7 @@ public class ArtCreateRequestDto {
     private String artist;
     private Date madeAt;
     private PartSort partSort;
+    private Role register;
     private Integer cherryNum;
 
     // TODO: 추후 modelmapper class 로 변경하기 > builder 로 하니까 mapping이 제대로 되지 않나봐..
@@ -33,6 +35,7 @@ public class ArtCreateRequestDto {
                 .madeAt(this.madeAt)
                 .artist(this.artist)
                 .partSort(this.partSort)
+                .register(this.register)
                 .cherryNum(this.cherryNum)
                 .build();
     }
@@ -49,6 +52,7 @@ public class ArtCreateRequestDto {
         this.heightSize = art.getHeightSize();
         this.materialStatus = art.getMaterialStatus();
         this.cherryNum = art.getCherryNum();
+        this.register = art.getRegister();
         return this;
     }
 }
