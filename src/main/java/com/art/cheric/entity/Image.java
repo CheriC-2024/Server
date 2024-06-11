@@ -12,14 +12,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "Image")
 @NoArgsConstructor
 @Getter
-@EntityListeners(value = {AuditingEntityListener.class})
+@EntityListeners(AuditingEntityListener.class)
 public class Image extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "image_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "art_id")
     @Comment("작품")
     private Art art;
@@ -28,7 +28,7 @@ public class Image extends BaseTime {
     @Comment("파일")
     private String file;
 
-    @Column(name = "orignFileName", nullable = false)
+    @Column(name = "filePath", nullable = false)
     @Comment("파일 저장 경로")
     private String filePath;
 
@@ -37,7 +37,7 @@ public class Image extends BaseTime {
     private Long fileSize;
 
     @Builder
-    public Image(Art art, String origFileName, String file, String filePath, Long fileSize) {
+    public Image(Art art, String file, String filePath, Long fileSize) {
         this.art = art;
         this.file = file;
         this.filePath = filePath;

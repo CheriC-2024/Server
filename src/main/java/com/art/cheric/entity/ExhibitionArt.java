@@ -11,7 +11,7 @@ import java.util.Objects;
 
 
 @Entity
-@EntityListeners(value = {AuditingEntityListener.class})
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "ExhibitionArt")
 @NoArgsConstructor
 @Getter
