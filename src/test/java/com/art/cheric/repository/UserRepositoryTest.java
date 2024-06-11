@@ -1,5 +1,6 @@
 package com.art.cheric.repository;
 
+import com.art.cheric.constant.PartSort;
 import com.art.cheric.constant.Role;
 import com.art.cheric.entity.User;
 import jakarta.transaction.Transactional;
@@ -27,13 +28,16 @@ public class UserRepositoryTest {
         String email = "name@test.com";
         String profileImg = "";
         String profileImgPath = "";
-        Role role = Role.COLLECTOR;
+        PartSort partSort = PartSort.DIGITAL_ART;
+        boolean isAlreadyCollector = false;
+
         User user = User.builder()
                 .name(name)
                 .email(email)
                 .profileImg(profileImg)
                 .profileImgPath(profileImgPath)
-                .role(role)
+                .partSort(partSort)
+                .isAlreadyCollector(isAlreadyCollector)
                 .build();
 
         // when
@@ -43,12 +47,12 @@ public class UserRepositoryTest {
         User findUser = userRepository.findById(id).orElseThrow(() -> new Exception("Null"));
 
         assertThat(findUser.getEmail()).as("User 정보가 제대로 저장되지 않음.").isEqualTo(email);
-        // assertThat(findUser.getRegTime()).as("Auditing 기능이 제대로 작동하지 않음.").isNotNull();
+        assertThat(findUser.getRegTime()).as("Auditing 기능이 제대로 작동하지 않음.").isNotNull();
 
         System.out.println(findUser.getEmail());
+        System.out.println(findUser.getCherry());
         System.out.println(findUser.getRole());
-        // TODO: 나중에 다시 살펴보기
-        // System.out.println(findUser.getRegTime());
+        System.out.println(findUser.getRegTime());
     }
 
 }
