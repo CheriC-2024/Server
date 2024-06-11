@@ -1,6 +1,6 @@
 package com.art.cheric.controller;
 
-import com.art.cheric.dto.CollectionCreationRequestDto;
+import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
 import com.art.cheric.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,28 +14,27 @@ public class CollectionController {
 
     private final CollectionService collectionService;
 
-    @PostMapping("/new")
-    public ResponseEntity<String> createNewCollection(@RequestParam(name = "email") String email,
-                                                      @RequestPart CollectionCreationRequestDto collectionCreationRequestDto) {
+    @PostMapping
+    public ResponseEntity<String> createNewCollection(@RequestParam(name = "userId") Long userId,
+                                                      @RequestBody CollectionCreationRequestDto collectionCreationRequestDto) {
         try {
-            Long collectionId = collectionService.createNewCollection(collectionCreationRequestDto, email);
+            Long collectionId = collectionService.createNewCollection(collectionCreationRequestDto, userId);
 
-            return ResponseEntity.ok("사용자: " + email + ", 컬렉션 ID: " + collectionId);
+            return ResponseEntity.ok("사용자 ID: " + userId + ", 컬렉션 ID: " + collectionId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("컬렉션 생성 실패 : " + e.getMessage());
         }
     }
 
-    @PostMapping
+    @PostMapping("add")
     public ResponseEntity<String> addNewArt(
             @RequestParam(name = "artId") Long artId,
-            @RequestParam(name = "collectionId") Long collectionId,
-            @RequestParam(name = "email") String email
+            @RequestParam(name = "collectionId") Long collectionId
     ) {
         try {
-            collectionService.addNewArt(artId, collectionId, email);
+            collectionService.addNewArt(artId, collectionId);
 
-            return ResponseEntity.ok("사용자: " + email + ", 컬렉션 ID: " + collectionId + ", 작품 ID: " + artId);
+            return ResponseEntity.ok("컬렉션 ID: " + collectionId + ", 작품 ID: " + artId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("작품 추가 실패 : " + e.getMessage());
         }

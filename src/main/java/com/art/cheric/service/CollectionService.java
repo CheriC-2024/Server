@@ -1,7 +1,6 @@
 package com.art.cheric.service;
 
-import com.art.cheric.constant.Role;
-import com.art.cheric.dto.CollectionCreationRequestDto;
+import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
 import com.art.cheric.entity.Art;
 import com.art.cheric.entity.Collection;
 import com.art.cheric.entity.CollectionArt;
@@ -23,21 +22,9 @@ public class CollectionService {
     private final CollectionRepository collectionRepository;
 
     // 컬렉션만 생성하는 api
-    public Long createNewCollection(CollectionCreationRequestDto collectionCreationRequestDto, String email) {
-        User user = userRepository.findByEmail(email);
-
-        // TODO: 회원가입 플로우 생기면 변경하기
-        if (user == null) {
-            User newUser = User.builder()
-                    .name("test User")
-                    .email(email)
-                    .profileImg("프로필 사진")
-                    .profileImgPath("")
-                    .role(Role.COLLECTOR)
-                    .cherry(5)
-                    .build();
-            user = userRepository.save(newUser);
-        }
+    public Long createNewCollection(CollectionCreationRequestDto collectionCreationRequestDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 ID 없음 : " + userId));
 
         Collection collection = Collection.builder()
                 .name(collectionCreationRequestDto.getName())
@@ -51,22 +38,7 @@ public class CollectionService {
     }
 
     // 컬렉션에 작품 추가하는 api
-    public void addNewArt(Long artId, Long collectionId, String email){
-        User user = userRepository.findByEmail(email);
-
-        // TODO: 회원가입 플로우 생기면 변경하기
-        if (user == null) {
-            User newUser = User.builder()
-                    .name("test User")
-                    .email(email)
-                    .profileImg("프로필 사진")
-                    .profileImgPath("")
-                    .role(Role.COLLECTOR)
-                    .cherry(5)
-                    .build();
-            user = userRepository.save(newUser);
-        }
-
+    public void addNewArt(Long artId, Long collectionId) {
         Collection collection = collectionRepository.findById(collectionId)
                 .orElseThrow(() -> new IllegalArgumentException("컬렉션 ID 없음 : " + collectionId));
 
