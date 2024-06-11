@@ -1,4 +1,4 @@
-package com.art.cheric.dto;
+package com.art.cheric.dto.collection.request;
 
 import lombok.Getter;
 
