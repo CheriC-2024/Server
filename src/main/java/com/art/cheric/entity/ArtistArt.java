@@ -1,58 +1,55 @@
 package com.art.cheric.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "MyArt")
+@Table(name = "ArtistArt")
 @NoArgsConstructor
 @Getter
-public class MyArt extends BaseTime {
+public class ArtistArt extends BaseTime {
     @Id
-    @Column(name = "my_art_id")
+    @Column(name = "artist_art_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "art_id")
-    @Comment("소유 작품")
+    @Comment("작가 등록 작품")
     private Art art;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @Comment("작품 소유자")
+    @Comment("작가")
     private User user;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")
-    @Column(name = "gotten_date")
-    @Comment("소장 일시")
-    private Date gottenDate;
+    @Column(name = "artist_description", length = 500)
+    @Comment("작가의 작품 설명")
+    private String artistDescription;
 
-    @Column(name = "gotten_path", length = 30)
-    @Comment("소장 경로")
-    private String gottenPath;
+    @Column(name = "artist", length = 30, nullable = false)
+    @Comment("저작권자")
+    private String copyright;
 
-    @Column(name = "gotten_price", length = 30)
-    @Comment("소장 가격")
-    private String gottenPrice;
-
+    @Column(name = "notice", length = 1000, nullable = false)
+    @Comment("작품 이용 주의사항")
+    private String notice;
 
     @Builder
-    public MyArt(Art art, User user, Date gottenDate, String gottenPath, String gottenPrice) {
+    public ArtistArt(Art art, User user, String artistDescription, String copyright, String notice) {
         this.art = art;
         this.user = user;
-        this.gottenDate = gottenDate;
-        this.gottenPath = gottenPath;
-        this.gottenPrice = gottenPrice;
+        this.artistDescription = artistDescription;
+        this.copyright = copyright;
+        this.notice = notice;
     }
 
     @Override
