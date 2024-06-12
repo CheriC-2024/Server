@@ -1,6 +1,7 @@
 package com.art.cheric.controller;
 
 import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
+import com.art.cheric.dto.collection.request.CollectionReadRequestDto;
 import com.art.cheric.dto.collection.respond.CollectionResponseDto;
 import com.art.cheric.exception.DuplicateEntryException;
 import com.art.cheric.service.CollectionService;
@@ -52,9 +53,9 @@ public class CollectionController {
 
     // 컬렉션 리스트 > 작품 리스트 읽기 api
     @PostMapping("/all")
-    public ResponseEntity<CollectionResponseDto> getCollectionsByIds(@RequestBody List<Long> ids) {
+    public ResponseEntity<CollectionResponseDto> getCollectionsByIds(@RequestBody CollectionReadRequestDto collectionReadRequestDto) {
         try {
-            return ResponseEntity.ok(collectionService.getCollectionsByIds(ids));
+            return ResponseEntity.ok(collectionService.getCollectionsByIds(collectionReadRequestDto.getCollectionIds()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
