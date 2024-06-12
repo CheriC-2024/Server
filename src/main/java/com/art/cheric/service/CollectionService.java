@@ -2,6 +2,7 @@ package com.art.cheric.service;
 
 import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
 import com.art.cheric.dto.collection.respond.CollectionReadDto;
+import com.art.cheric.dto.collection.respond.CollectionResponseDto;
 import com.art.cheric.entity.Art;
 import com.art.cheric.entity.Collection;
 import com.art.cheric.entity.CollectionArt;
@@ -13,9 +14,14 @@ import com.art.cheric.repository.CollectionRepository;
 import com.art.cheric.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,10 +71,28 @@ public class CollectionService {
         collectionArtRepository.save(collectionArt);
     }
 
-    public List<CollectionReadDto> getCollectionsByIds(List<Long> ids) {
+    public CollectionResponseDto getCollectionsByIds(List<Long> ids) {
         List<Collection> collections = collectionRepository.findByIdIn(ids);
-        return collections.stream()
+        if (collections.size() <= ids.size()) {
+            Set<Long> foundIds = collections.stream().map(Collection::getId).collect(Collectors.toSet());
+            Set<Long> missingIds = new HashSet<>(ids);
+            missingIds.removeAll(foundIds);
+
+            if (!missingIds.isEmpty()) {
+                throw new IllegalArgumentException("컬렉션 ID 중 일부 ID 없음 : " + missingIds);
+            }
+
+            if(collections.isEmpty()){
+                throw new IllegalArgumentException("컬렉션을 모두 찾을 수 없습니다." + ids);
+            }
+        }
+
+        List<CollectionReadDto> collectionReadDtos = collections.stream()
                 .map(collection -> new CollectionReadDto().of(collection))
                 .collect(Collectors.toList());
+
+        CollectionResponseDto collectionResponseDto = new CollectionResponseDto();
+
+        return collectionResponseDto.of(collectionReadDtos);
     }
 }

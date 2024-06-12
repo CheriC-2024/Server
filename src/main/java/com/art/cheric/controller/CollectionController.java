@@ -1,7 +1,8 @@
 package com.art.cheric.controller;
 
 import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
-import com.art.cheric.dto.collection.respond.CollectionReadDto;
+import com.art.cheric.dto.collection.request.CollectionReadRequestDto;
+import com.art.cheric.dto.collection.respond.CollectionResponseDto;
 import com.art.cheric.exception.DuplicateEntryException;
 import com.art.cheric.service.CollectionService;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +42,9 @@ public class CollectionController {
             collectionService.addNewArt(artId, collectionId);
 
             return ResponseEntity.ok("컬렉션 ID: " + collectionId + ", 작품 ID: " + artId);
-        }  catch (DuplicateEntryException e){
+        } catch (DuplicateEntryException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 항목 발생: " + e.getMessage());
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("작품 추가 실패 : " + e.getMessage());
@@ -52,8 +53,14 @@ public class CollectionController {
 
     // 컬렉션 리스트 > 작품 리스트 읽기 api
     @PostMapping("/all")
-    public List<CollectionReadDto> getCollectionsByIds(@RequestBody List<Long> ids) {
-        return collectionService.getCollectionsByIds(ids);
+    public ResponseEntity<CollectionResponseDto> getCollectionsByIds(@RequestBody CollectionReadRequestDto collectionReadRequestDto) {
+        try {
+            return ResponseEntity.ok(collectionService.getCollectionsByIds(collectionReadRequestDto.getCollectionIds()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 
