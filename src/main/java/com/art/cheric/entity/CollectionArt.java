@@ -25,7 +25,7 @@ public class CollectionArt extends BaseTime {
     @Comment("컬렉션")
     private Collection collection;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "art_id")
     @Comment("컬렉션 작품")
     private Art art;
@@ -42,12 +42,13 @@ public class CollectionArt extends BaseTime {
         if (!(obj instanceof CollectionArt collectionArt)) return false;
 
         return Objects.equals(this.id, collectionArt.getId()) &&
-                Objects.equals(this.art, collectionArt.getArt());
+                Objects.equals(this.art, collectionArt.getArt())&&
+                Objects.equals(this.collection, collectionArt.getCollection());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, art);
+        return Objects.hash(id, art, collection);
     }
 
 }
