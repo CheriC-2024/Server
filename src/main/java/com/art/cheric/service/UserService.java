@@ -4,7 +4,7 @@ import com.art.cheric.constant.Role;
 import com.art.cheric.dto.user.request.UserCreateRequestDto;
 import com.art.cheric.dto.user.respond.CherryRespondDto;
 import com.art.cheric.entity.User;
-import com.art.cheric.exception.CherryOutOfRangeException;
+import com.art.cheric.exception.OutOfRangeException;
 import com.art.cheric.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +89,7 @@ public class UserService {
         user.minusCherry(minusCherryNum);
 
         if (user.getCherry() < 0) {
-            throw new CherryOutOfRangeException("체리 수는 0보다 작게 설정할 수 없습니다.");
+            throw new OutOfRangeException("체리 수는 0보다 작게 설정할 수 없습니다.");
         }
 
         userRepository.save(user);
