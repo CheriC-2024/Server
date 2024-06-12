@@ -2,6 +2,7 @@ package com.art.cheric.entity;
 
 import com.art.cheric.constant.MaterialSort;
 import com.art.cheric.constant.PartSort;
+import com.art.cheric.constant.Role;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -67,13 +68,17 @@ public class Art extends BaseTime {
     @Comment("작품 사용 재료")
     private MaterialSort materialStatus;
 
+    @Column(name = "register", nullable = false)
+    @Comment("작품 등록")
+    private Role register;
+
     @Column(name = "cherryNum")
     @Comment("체리 가격")
     private Integer cherryNum;
 
     @Builder
     public Art(String name, String artist, Date madeAt, PartSort partSort, List<Image> imageList, String series, String description,
-               Integer widthSize, Integer heightSize, MaterialSort materialStatus, Integer cherryNum) {
+               Integer widthSize, Integer heightSize, MaterialSort materialStatus, Integer cherryNum, Role register) {
         this.name = name;
         this.artist = artist;
         this.madeAt = madeAt;
@@ -85,6 +90,7 @@ public class Art extends BaseTime {
         this.heightSize = heightSize;
         this.materialStatus = materialStatus;
         this.cherryNum = cherryNum;
+        this.register = register;
     }
 
     public void addImageList(List<Image> imageList) {

@@ -3,7 +3,7 @@ package com.art.cheric.controller;
 import com.art.cheric.constant.Role;
 import com.art.cheric.dto.user.request.UserCreateRequestDto;
 import com.art.cheric.dto.user.respond.CherryRespondDto;
-import com.art.cheric.exception.CherryOutOfRangeException;
+import com.art.cheric.exception.OutOfRangeException;
 import com.art.cheric.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +67,7 @@ public class UserController {
             int cherry = userService.minusCherry(userId, minusCherryNum);
 
             return ResponseEntity.ok("체리 개수가 " + cherry + "로 감소되었습니다.");
-        } catch (CherryOutOfRangeException e) {
+        } catch (OutOfRangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

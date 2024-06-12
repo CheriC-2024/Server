@@ -1,11 +1,15 @@
 package com.art.cheric.controller;
 
 import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
+import com.art.cheric.dto.collection.respond.CollectionReadDto;
+import com.art.cheric.exception.DuplicateEntryException;
 import com.art.cheric.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -14,6 +18,7 @@ public class CollectionController {
 
     private final CollectionService collectionService;
 
+    // 컬렉션 생성 api
     @PostMapping
     public ResponseEntity<String> createNewCollection(@RequestParam(name = "userId") Long userId,
                                                       @RequestBody CollectionCreationRequestDto collectionCreationRequestDto) {
@@ -26,7 +31,8 @@ public class CollectionController {
         }
     }
 
-    @PostMapping("add")
+    // 컬렉션에 작품 추가 api
+    @PostMapping("/add")
     public ResponseEntity<String> addNewArt(
             @RequestParam(name = "artId") Long artId,
             @RequestParam(name = "collectionId") Long collectionId
@@ -35,9 +41,20 @@ public class CollectionController {
             collectionService.addNewArt(artId, collectionId);
 
             return ResponseEntity.ok("컬렉션 ID: " + collectionId + ", 작품 ID: " + artId);
+        }  catch (DuplicateEntryException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 항목 발생: " + e.getMessage());
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("작품 추가 실패 : " + e.getMessage());
         }
     }
+
+    // 컬렉션 리스트 > 작품 리스트 읽기 api
+    @PostMapping("/all")
+    public List<CollectionReadDto> getCollectionsByIds(@RequestBody List<Long> ids) {
+        return collectionService.getCollectionsByIds(ids);
+    }
+
 
 }
