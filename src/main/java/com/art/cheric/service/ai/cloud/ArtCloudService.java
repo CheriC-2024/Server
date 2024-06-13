@@ -26,7 +26,7 @@ public class ArtCloudService {
     private final ArtRepository artRepository;
 
     // 색상 추출
-    public List<ArtCloudResponseDTO> extractColors(ArtCloudRequestDTO artCloudRequestDTO) throws Exception {
+    public List<ArtCloudResponseDTO> extractColors(ArtCloudRequestDTO artCloudRequestDTO, Feature.Type fetureType, int maxResult) throws Exception {
         // 최종 응답을 담을 객체
         List<ArtCloudResponseDTO> artCloudResponseDTOS = new ArrayList<>();
 
@@ -40,32 +40,41 @@ public class ArtCloudService {
                         .orElseThrow(() -> new IllegalArgumentException("작품 ID 없음 : " + artId));
 
                 // vision api 에 요청 보내고 응답 받기
-                BatchAnnotateImagesResponse response = vision.batchAnnotateImages(List.of(makeCloudVisionRequest(art)));
+                BatchAnnotateImagesResponse response = vision.batchAnnotateImages(List.of(makeCloudVisionRequest(art, fetureType, maxResult)));
 
                 // 응답 객체 리스트 반환
-                List<AnnotateImageResponse> colorResponse = response.getResponsesList();
+                List<AnnotateImageResponse> responses = response.getResponsesList();
 
                 // 응답 처리
                 ArtCloudResponseDTO artCloudResponseDTO = new ArtCloudResponseDTO(artId);
 
                 // 에러 확인 및 에러 날리기
-                for (AnnotateImageResponse res : colorResponse) {
+                for (AnnotateImageResponse res : responses) {
                     if (res.hasError()) {
-                       // TODO 그냥 error 찍는 게 나을지, 아니면 아예 에러 던지는 게 나을지 고민해보기
+                        // TODO 그냥 error 찍는 게 나을지, 아니면 아예 에러 던지는 게 나을지 고민해보기
                         System.out.printf("Error: %s\n", res.getError().getMessage());
                         continue;
                     }
 
-                    // 색상 정보 score 에 따라 상위 4개 색상 추출해 hex 값 반환
-                    ImageProperties imageProperties = res.getImagePropertiesAnnotation();
-                    List<String> dominantColorsHex = imageProperties.getDominantColors().getColorsList().stream()
-                            .sorted((c1, c2) -> Float.compare(c2.getScore(), c1.getScore()))
-                            .limit(4)
-                            .map(colorInfo -> ColorUtils.rgbToHex(colorInfo.getColor().getRed(), colorInfo.getColor().getGreen(), colorInfo.getColor().getBlue()))
-                            .toList();
+                    if(fetureType == Feature.Type.IMAGE_PROPERTIES){
+                        // 색상 정보 score 에 따라 상위 4개 색상 추출해 hex 값 반환
+                        ImageProperties imageProperties = res.getImagePropertiesAnnotation();
+                        List<String> dominantColorsHex = imageProperties.getDominantColors().getColorsList().stream()
+                                .sorted((c1, c2) -> Float.compare(c2.getScore(), c1.getScore()))
+                                .limit(4)
+                                .map(colorInfo -> ColorUtils.rgbToHex(colorInfo.getColor().getRed(), colorInfo.getColor().getGreen(), colorInfo.getColor().getBlue()))
+                                .toList();
 
-                    // 추출한 색상 정보를 객체에 추가
-                    artCloudResponseDTO.getProperties().addAll(dominantColorsHex);
+                        // 추출한 색상 정보를 객체에 추가
+                        artCloudResponseDTO.getProperties().addAll(dominantColorsHex);
+                    } else if(fetureType == Feature.Type.LABEL_DETECTION){
+                        // 라벨 정보 5개만 제한해서 가져오기
+                        List<String> labels = res.getLabelAnnotationsList().stream()
+                                .map(EntityAnnotation::getDescription)
+                                .limit(5)
+                                .toList();
+                        artCloudResponseDTO.getProperties().addAll(labels);
+                    }
                 }
 
                 // 완성된 객체를 최종 응답에 추가
@@ -94,14 +103,14 @@ public class ArtCloudService {
 
 
     // vision api 요청 객체 만들기
-    private AnnotateImageRequest makeCloudVisionRequest(Art art) throws IOException {
+    private AnnotateImageRequest makeCloudVisionRequest(Art art, Feature.Type requestMethod, int maxResult) throws IOException {
         // 이미지 파일 생성
         String filePath = art.getImageList().get(0).getFilePath();
         ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
         Image img = Image.newBuilder().setContent(imgBytes).build();
 
         // 이미지 속성 탐지를 위한 feature 객체 생성
-        Feature feat = Feature.newBuilder().setType(Feature.Type.IMAGE_PROPERTIES).build();
+        Feature feat = Feature.newBuilder().setType(requestMethod).setMaxResults(maxResult).build();
 
         // 이미지와 기능 포함하는 요청 객체 생성
         return AnnotateImageRequest.newBuilder()
