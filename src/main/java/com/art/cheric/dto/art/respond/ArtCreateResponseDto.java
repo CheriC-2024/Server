@@ -23,6 +23,7 @@ public class ArtCreateResponseDto {
     private Role register;
     private Integer cherryNum;
     private String filePath;
+    private String fileName;
 
     public ArtCreateResponseDto of(Art art) {
         this.artId = art.getId();
@@ -38,6 +39,8 @@ public class ArtCreateResponseDto {
         this.cherryNum = art.getCherryNum();
         this.register = art.getRegister();
         this.filePath = art.getImageList().get(0).getFilePath();
+        this.fileName = art.getImageList().get(0).getFile();
+
         return this;
     }
 }
