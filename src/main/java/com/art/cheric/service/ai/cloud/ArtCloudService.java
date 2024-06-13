@@ -1,6 +1,7 @@
 package com.art.cheric.service.ai.cloud;
 
-import com.art.cheric.dto.exhibition.ai.respond.ArtColorResponseDTO;
+import com.art.cheric.dto.exhibition.ai.request.ArtCloudRequestDTO;
+import com.art.cheric.dto.exhibition.ai.respond.ArtCloudResponseDTO;
 import com.art.cheric.entity.Art;
 import com.art.cheric.repository.ArtRepository;
 import com.art.cheric.util.ColorUtils;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,14 +26,16 @@ public class ArtCloudService {
     private final ArtRepository artRepository;
 
     // 색상 추출
-    public List<ArtColorResponseDTO> extractColors(List<Long> artIds) throws Exception {
-        List<ArtColorResponseDTO> artColorResponseDTOS = new ArrayList<>();
+    public List<ArtCloudResponseDTO> extractColors(ArtCloudRequestDTO artCloudRequestDTO) throws Exception {
+        List<ArtCloudResponseDTO> artCloudResponseDTOS = new ArrayList<>();
+
+        List<Long> artIds = artCloudRequestDTO.getArtIds();
+
         Set<Long> uniqueArtIds = new HashSet<>(artIds);
         if (uniqueArtIds.size() != artIds.size()) {
             throw new IllegalArgumentException("중복된 작품 ID가 있습니다.");
         }
 
-        // 최대 개수 제한 검사
         if (artIds.size() > 30) {
             throw new IllegalArgumentException("작품 ID는 최대 30개까지 허용됩니다.");
         }
@@ -54,10 +58,10 @@ public class ArtCloudService {
                 BatchAnnotateImagesResponse response = vision.batchAnnotateImages(List.of(request));
                 List<AnnotateImageResponse> responses = response.getResponsesList();
 
-                ArtColorResponseDTO artColorResponseDTO = new ArtColorResponseDTO();
-                artColorResponseDTO.setArtId(artId);
-                artColorResponseDTO.setArtImage(filePath);
-                artColorResponseDTO.setColors(new ArrayList<>());
+                ArtCloudResponseDTO artCloudResponseDTO = new ArtCloudResponseDTO();
+                artCloudResponseDTO.setArtId(artId);
+                artCloudResponseDTO.setArtImage(filePath);
+                artCloudResponseDTO.setProperties(new ArrayList<>());
 
                 for (AnnotateImageResponse res : responses) {
                     if (res.hasError()) {
@@ -73,15 +77,15 @@ public class ArtCloudService {
                                 .map(colorInfo -> ColorUtils.rgbToHex(colorInfo.getColor().getRed(), colorInfo.getColor().getGreen(), colorInfo.getColor().getBlue()))
                                 .toList();
 
-                        artColorResponseDTO.getColors().addAll(dominantColorsHex);
+                        artCloudResponseDTO.getProperties().addAll(dominantColorsHex);
                     }
                 }
-                artColorResponseDTOS.add(artColorResponseDTO);
+                artCloudResponseDTOS.add(artCloudResponseDTO);
             }
         }
-        return artColorResponseDTOS;
+        return artCloudResponseDTOS;
     }
-    
-    
-    // 
+
+
+    //
 }
