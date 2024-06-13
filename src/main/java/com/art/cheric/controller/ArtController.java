@@ -2,6 +2,8 @@ package com.art.cheric.controller;
 
 import com.art.cheric.dto.art.request.ArtistArtCreateRequestDto;
 import com.art.cheric.dto.art.request.MyArtCreateRequestDto;
+import com.art.cheric.dto.art.respond.ArtistArtCreateResponseDto;
+import com.art.cheric.dto.art.respond.MyArtCreateReseponseDto;
 import com.art.cheric.exception.UnauthorizedAccessException;
 import com.art.cheric.service.ArtService;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +40,11 @@ public class ArtController {
 
     // 작가 작품 조회 api
     @GetMapping("/artist_art/{artId}")
-    public ResponseEntity<ArtistArtCreateRequestDto> getArtistArtById(@PathVariable(name = "artId") Long artId) {
+    public ResponseEntity<ArtistArtCreateResponseDto> getArtistArtById(@PathVariable(name = "artId") Long artId) {
         try {
-            ArtistArtCreateRequestDto artistArtCreateRequestDto = artService.getArtistArtById(artId);
+            ArtistArtCreateResponseDto artCreateResponseDto = artService.getArtistArtById(artId);
 
-            return ResponseEntity.ok().body(artistArtCreateRequestDto);
+            return ResponseEntity.ok().body(artCreateResponseDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (HttpClientErrorException e) {
@@ -70,11 +72,11 @@ public class ArtController {
 
     // 작가 작품 조회 api
     @GetMapping("/my_art/{artId}")
-    public ResponseEntity<MyArtCreateRequestDto> getMyArtById(@PathVariable(name = "artId") Long artId) {
+    public ResponseEntity<MyArtCreateReseponseDto> getMyArtById(@PathVariable(name = "artId") Long artId) {
         try {
-            MyArtCreateRequestDto myArtCreateRequestDto = artService.getMyArtById(artId);
+            MyArtCreateReseponseDto myArtCreateReseponseDto = artService.getMyArtById(artId);
 
-            return ResponseEntity.ok().body(myArtCreateRequestDto);
+            return ResponseEntity.ok().body(myArtCreateReseponseDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (HttpClientErrorException e) {

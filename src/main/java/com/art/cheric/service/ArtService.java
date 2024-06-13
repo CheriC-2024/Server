@@ -2,6 +2,8 @@ package com.art.cheric.service;
 
 import com.art.cheric.dto.art.request.ArtistArtCreateRequestDto;
 import com.art.cheric.dto.art.request.MyArtCreateRequestDto;
+import com.art.cheric.dto.art.respond.ArtistArtCreateResponseDto;
+import com.art.cheric.dto.art.respond.MyArtCreateReseponseDto;
 import com.art.cheric.entity.*;
 import com.art.cheric.repository.ArtRepository;
 import com.art.cheric.repository.ArtistArtRepository;
@@ -72,15 +74,15 @@ public class ArtService {
     }
 
     // 작가 작품 조회 api
-    public ArtistArtCreateRequestDto getArtistArtById(Long artId) {
+    public ArtistArtCreateResponseDto getArtistArtById(Long artId) {
         Art art = artRepository.findById(artId)
                 .orElseThrow(() -> new IllegalArgumentException("작품 ID 없음 : " + artId));
 
         Optional<ArtistArt> artistArtOptional = Optional.ofNullable(artistArtRepository.findByArt(art));
         if (artistArtOptional.isPresent()) {
             ArtistArt artistArt = artistArtOptional.get();
-            ArtistArtCreateRequestDto artistArtCreateRequestDto = new ArtistArtCreateRequestDto();
-            return artistArtCreateRequestDto.of(artistArt);
+            ArtistArtCreateResponseDto artCreateResponseDto = new ArtistArtCreateResponseDto();
+            return artCreateResponseDto.of(artistArt);
         } else {
             throw new IllegalArgumentException("해당 작품은 소장 작품입니다.");
         }
@@ -125,15 +127,15 @@ public class ArtService {
     }
 
     // 작가 작품 조회 api
-    public MyArtCreateRequestDto getMyArtById(Long artId) {
+    public MyArtCreateReseponseDto getMyArtById(Long artId) {
         Art art = artRepository.findById(artId)
                 .orElseThrow(() -> new IllegalArgumentException("작품 ID 없음 : " + artId));
 
         Optional<MyArt> myArtOptional = Optional.ofNullable(myArtRepository.findByArt(art));
         if (myArtOptional.isPresent()) {
             MyArt myArt = myArtOptional.get();
-            MyArtCreateRequestDto myArtCreateRequestDto = new MyArtCreateRequestDto();
-            return myArtCreateRequestDto.of(myArt);
+            MyArtCreateReseponseDto myArtCreateReseponseDto = new MyArtCreateReseponseDto();
+            return myArtCreateReseponseDto.of(myArt);
         } else {
             throw new IllegalArgumentException("해당 작품은 소장 작품입니다.");
         }

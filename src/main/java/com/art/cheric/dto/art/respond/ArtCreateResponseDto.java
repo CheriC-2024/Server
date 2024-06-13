@@ -1,4 +1,4 @@
-package com.art.cheric.dto.art.request;
+package com.art.cheric.dto.art.respond;
 
 import com.art.cheric.constant.MaterialSort;
 import com.art.cheric.constant.PartSort;
@@ -9,7 +9,7 @@ import lombok.Getter;
 import java.util.Date;
 
 @Getter
-public class ArtCreateRequestDto {
+public class ArtCreateResponseDto {
     private Long artId;
     private String name;
     private String series;
@@ -20,26 +20,10 @@ public class ArtCreateRequestDto {
     private String artist;
     private Date madeAt;
     private PartSort partSort;
+    private Role register;
     private Integer cherryNum;
 
-    // TODO: 추후 modelmapper class 로 변경하기 > builder 로 하니까 mapping이 제대로 되지 않나봐..
-    public Art createArt(Role register) {
-        return Art.builder()
-                .name(this.name)
-                .series(this.series)
-                .description(this.description)
-                .widthSize(this.widthSize)
-                .heightSize(this.heightSize)
-                .materialStatus(this.materialStatus)
-                .madeAt(this.madeAt)
-                .artist(this.artist)
-                .partSort(this.partSort)
-                .register(register)
-                .cherryNum(this.cherryNum)
-                .build();
-    }
-
-    public ArtCreateRequestDto of(Art art) {
+    public ArtCreateResponseDto of(Art art) {
         this.artId = art.getId();
         this.madeAt = art.getMadeAt();
         this.artist = art.getArtist();
@@ -51,6 +35,7 @@ public class ArtCreateRequestDto {
         this.heightSize = art.getHeightSize();
         this.materialStatus = art.getMaterialStatus();
         this.cherryNum = art.getCherryNum();
+        this.register = art.getRegister();
         return this;
     }
 }
