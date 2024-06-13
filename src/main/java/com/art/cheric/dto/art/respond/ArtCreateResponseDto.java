@@ -22,6 +22,7 @@ public class ArtCreateResponseDto {
     private PartSort partSort;
     private Role register;
     private Integer cherryNum;
+    private String filePath;
 
     public ArtCreateResponseDto of(Art art) {
         this.artId = art.getId();
@@ -36,6 +37,7 @@ public class ArtCreateResponseDto {
         this.materialStatus = art.getMaterialStatus();
         this.cherryNum = art.getCherryNum();
         this.register = art.getRegister();
+        this.filePath = art.getImageList().get(0).getFilePath();
         return this;
     }
 }
