@@ -2,7 +2,7 @@ package com.art.cheric.controller;
 
 import com.art.cheric.constant.Role;
 import com.art.cheric.dto.user.request.UserCreateRequestDto;
-import com.art.cheric.dto.user.respond.CherryRespondDto;
+import com.art.cheric.dto.user.respond.CherryResponseDto;
 import com.art.cheric.exception.OutOfRangeException;
 import com.art.cheric.service.UserService;
 import jakarta.validation.Valid;
@@ -48,11 +48,11 @@ public class UserController {
     }
 
     @GetMapping("/cherry")
-    public ResponseEntity<CherryRespondDto> readCherry(@RequestParam(name = "userId") Long userId) {
+    public ResponseEntity<CherryResponseDto> readCherry(@RequestParam(name = "userId") Long userId) {
         try {
-            CherryRespondDto cherryRespondDto = userService.readCherry(userId);
+            CherryResponseDto cherryResponseDto = userService.readCherry(userId);
 
-            return ResponseEntity.ok(cherryRespondDto);
+            return ResponseEntity.ok(cherryResponseDto);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {

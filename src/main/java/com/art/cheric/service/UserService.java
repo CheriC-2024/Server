@@ -2,7 +2,7 @@ package com.art.cheric.service;
 
 import com.art.cheric.constant.Role;
 import com.art.cheric.dto.user.request.UserCreateRequestDto;
-import com.art.cheric.dto.user.respond.CherryRespondDto;
+import com.art.cheric.dto.user.respond.CherryResponseDto;
 import com.art.cheric.entity.User;
 import com.art.cheric.exception.OutOfRangeException;
 import com.art.cheric.repository.UserRepository;
@@ -59,14 +59,14 @@ public class UserService {
         return user.getRole();
     }
 
-    public CherryRespondDto readCherry(Long userId) {
+    public CherryResponseDto readCherry(Long userId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 ID 없음 : " + userId));
 
-        CherryRespondDto cherryRespondDto = new CherryRespondDto();
-        cherryRespondDto.setCherry(user.getCherry());
-        return cherryRespondDto;
+        CherryResponseDto cherryResponseDto = new CherryResponseDto();
+        cherryResponseDto.setCherry(user.getCherry());
+        return cherryResponseDto;
     }
 
     public int plusCherry(Long userId, int plusCherryNum) {

@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CherryRespondDto {
+public class CherryResponseDto {
     private Integer cherry;
 }
