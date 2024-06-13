@@ -23,8 +23,9 @@ import java.util.Set;
 public class ArtCloudService {
     private final ArtRepository artRepository;
 
+    // 색상 추출
     public List<ArtColorResponseDTO> extractColors(List<Long> artIds) throws Exception {
-        List<ArtColorResponseDTO> artworkAttributesList = new ArrayList<>();
+        List<ArtColorResponseDTO> artColorResponseDTOS = new ArrayList<>();
         Set<Long> uniqueArtIds = new HashSet<>(artIds);
         if (uniqueArtIds.size() != artIds.size()) {
             throw new IllegalArgumentException("중복된 작품 ID가 있습니다.");
@@ -53,10 +54,10 @@ public class ArtCloudService {
                 BatchAnnotateImagesResponse response = vision.batchAnnotateImages(List.of(request));
                 List<AnnotateImageResponse> responses = response.getResponsesList();
 
-                ArtColorResponseDTO attributesDTO = new ArtColorResponseDTO();
-                attributesDTO.setArtId(artId);
-                attributesDTO.setArtImage(filePath);
-                attributesDTO.setColors(new ArrayList<>());
+                ArtColorResponseDTO artColorResponseDTO = new ArtColorResponseDTO();
+                artColorResponseDTO.setArtId(artId);
+                artColorResponseDTO.setArtImage(filePath);
+                artColorResponseDTO.setColors(new ArrayList<>());
 
                 for (AnnotateImageResponse res : responses) {
                     if (res.hasError()) {
@@ -72,12 +73,15 @@ public class ArtCloudService {
                                 .map(colorInfo -> ColorUtils.rgbToHex(colorInfo.getColor().getRed(), colorInfo.getColor().getGreen(), colorInfo.getColor().getBlue()))
                                 .toList();
 
-                        attributesDTO.getColors().addAll(dominantColorsHex);
+                        artColorResponseDTO.getColors().addAll(dominantColorsHex);
                     }
                 }
-                artworkAttributesList.add(attributesDTO);
+                artColorResponseDTOS.add(artColorResponseDTO);
             }
         }
-        return artworkAttributesList;
+        return artColorResponseDTOS;
     }
+    
+    
+    // 
 }
