@@ -26,22 +26,19 @@ public class ArtCloudController {
     @PostMapping("/color")
     public ResponseEntity<ArtworkResponseDTO> extractColors(
             @RequestBody @Validated ArtCloudRequestDTO request) {
+        ArtworkResponseDTO responseDTO = new ArtworkResponseDTO();
 
         try {
             List<ArtCloudResponseDTO> attributes = artCloudService.extractColors(request);
-            ArtworkResponseDTO responseDTO = new ArtworkResponseDTO();
             responseDTO.setCode(HttpStatus.CREATED.value());
             responseDTO.setMessage("속성이 추출되었습니다.");
             responseDTO.setValue(attributes);
-
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
-        }  catch (IllegalArgumentException e) {
-            ArtworkResponseDTO responseDTO = new ArtworkResponseDTO();
+        } catch (IllegalArgumentException e) {
             responseDTO.setCode(HttpStatus.NOT_FOUND.value());
             responseDTO.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
         } catch (Exception e) {
-            ArtworkResponseDTO responseDTO = new ArtworkResponseDTO();
             responseDTO.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             responseDTO.setMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseDTO);
