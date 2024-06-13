@@ -20,11 +20,10 @@ public class ArtCreateRequestDto {
     private String artist;
     private Date madeAt;
     private PartSort partSort;
-    private Role register;
     private Integer cherryNum;
 
     // TODO: 추후 modelmapper class 로 변경하기 > builder 로 하니까 mapping이 제대로 되지 않나봐..
-    public Art createArt() {
+    public Art createArt(Role register) {
         return Art.builder()
                 .name(this.name)
                 .series(this.series)
@@ -35,7 +34,7 @@ public class ArtCreateRequestDto {
                 .madeAt(this.madeAt)
                 .artist(this.artist)
                 .partSort(this.partSort)
-                .register(this.register)
+                .register(register)
                 .cherryNum(this.cherryNum)
                 .build();
     }
@@ -52,7 +51,6 @@ public class ArtCreateRequestDto {
         this.heightSize = art.getHeightSize();
         this.materialStatus = art.getMaterialStatus();
         this.cherryNum = art.getCherryNum();
-        this.register = art.getRegister();
         return this;
     }
 }

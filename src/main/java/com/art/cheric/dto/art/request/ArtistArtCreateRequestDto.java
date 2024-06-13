@@ -1,5 +1,6 @@
 package com.art.cheric.dto.art.request;
 
+import com.art.cheric.constant.Role;
 import com.art.cheric.entity.Art;
 import com.art.cheric.entity.ArtistArt;
 import com.art.cheric.entity.User;
@@ -14,7 +15,7 @@ public class ArtistArtCreateRequestDto {
 
     // TODO: 추후 modelmapper class 로 변경하기 > builder 로 하니까 mapping이 제대로 되지 않나봐..
     public ArtistArt createArtistArt(User artist) {
-        Art newArt = this.art.createArt();
+        Art newArt = this.art.createArt(Role.ARTIST);
 
         return ArtistArt.builder()
                 .art(newArt)
