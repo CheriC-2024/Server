@@ -1,8 +1,10 @@
 package com.art.cheric.service;
 
 import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
+import com.art.cheric.dto.collection.respond.CollectionReadAllDto;
 import com.art.cheric.dto.collection.respond.CollectionReadDto;
 import com.art.cheric.dto.collection.respond.CollectionResponseDto;
+import com.art.cheric.dto.collection.respond.CollectionResponseDto2;
 import com.art.cheric.entity.Art;
 import com.art.cheric.entity.Collection;
 import com.art.cheric.entity.CollectionArt;
@@ -14,10 +16,7 @@ import com.art.cheric.repository.CollectionRepository;
 import com.art.cheric.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.C;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -71,6 +70,22 @@ public class CollectionService {
         collectionArtRepository.save(collectionArt);
     }
 
+    // TODO: 추후에 변경하기
+    public CollectionResponseDto2 getCollectionsByUserId(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자 ID 없음 : " + userId));
+
+        List<Collection> collections = collectionRepository.findByUser(user);
+
+        List<CollectionReadAllDto> collectionReadDtos = collections.stream()
+                .map(collection -> new CollectionReadAllDto().of(collection))
+                .collect(Collectors.toList());
+
+        CollectionResponseDto2 CollectionResponseDto2 = new CollectionResponseDto2();
+
+        return CollectionResponseDto2.of(collectionReadDtos);
+    }
+
     public CollectionResponseDto getCollectionsByIds(List<Long> ids) {
         List<Collection> collections = collectionRepository.findByIdIn(ids);
         if (collections.size() <= ids.size()) {
@@ -82,7 +97,7 @@ public class CollectionService {
                 throw new IllegalArgumentException("컬렉션 ID 중 일부 ID 없음 : " + missingIds);
             }
 
-            if(collections.isEmpty()){
+            if (collections.isEmpty()) {
                 throw new IllegalArgumentException("컬렉션을 모두 찾을 수 없습니다." + ids);
             }
         }

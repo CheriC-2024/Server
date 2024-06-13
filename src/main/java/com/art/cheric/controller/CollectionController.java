@@ -3,14 +3,13 @@ package com.art.cheric.controller;
 import com.art.cheric.dto.collection.request.CollectionCreationRequestDto;
 import com.art.cheric.dto.collection.request.CollectionReadRequestDto;
 import com.art.cheric.dto.collection.respond.CollectionResponseDto;
+import com.art.cheric.dto.collection.respond.CollectionResponseDto2;
 import com.art.cheric.exception.DuplicateEntryException;
 import com.art.cheric.service.CollectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,6 +55,19 @@ public class CollectionController {
     public ResponseEntity<CollectionResponseDto> getCollectionsByIds(@RequestBody CollectionReadRequestDto collectionReadRequestDto) {
         try {
             return ResponseEntity.ok(collectionService.getCollectionsByIds(collectionReadRequestDto.getCollectionIds()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+    // 컬렉션 리스트 > 사용자 id 따라 작품 리스트 읽기 api
+    @GetMapping
+    public ResponseEntity<CollectionResponseDto2> getCollectionsByUserId(@RequestParam(name = "userId") Long userId) {
+        try {
+            return ResponseEntity.ok(collectionService.getCollectionsByUserId(userId));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
