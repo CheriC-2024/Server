@@ -11,6 +11,7 @@ public class CollectionArtReadDto {
     private Role register;
     private Integer cherryNum;
     private String filePath;
+    private String fileName;
 
     public CollectionArtReadDto of(Art art) {
         this.artId = art.getId();
@@ -18,6 +19,7 @@ public class CollectionArtReadDto {
         this.register = art.getRegister();
         this.cherryNum = art.getCherryNum();
         this.filePath = art.getImageList().get(0).getFilePath();
+        this.fileName = art.getImageList().get(0).getFile();
         return this;
     }
 }

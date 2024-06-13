@@ -9,6 +9,7 @@ public class CollectionReadAllDto {
     private String name;
     private String description;
     private String filePath;
+    private String fileName;
 
     public CollectionReadAllDto of(Collection collection) {
         this.id = collection.getId();
@@ -16,6 +17,7 @@ public class CollectionReadAllDto {
         this.name = collection.getName();
         if(!collection.getCollectionArtList().isEmpty()){
             this.filePath = collection.getCollectionArtList().get(0).getArt().getImageList().get(0).getFilePath();
+            this.fileName = collection.getCollectionArtList().get(0).getArt().getImageList().get(0).getFile();
         }
         return this;
     }
