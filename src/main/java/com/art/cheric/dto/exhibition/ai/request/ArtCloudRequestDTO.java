@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ArtColorRequestDTO {
+public class ArtCloudRequestDTO {
     @NotEmpty
     private List<Long> artIds;
 

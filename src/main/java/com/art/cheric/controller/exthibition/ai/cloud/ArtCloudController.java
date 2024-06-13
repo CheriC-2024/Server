@@ -1,7 +1,7 @@
 package com.art.cheric.controller.exthibition.ai.cloud;
 
-import com.art.cheric.dto.exhibition.ai.request.ArtColorRequestDTO;
-import com.art.cheric.dto.exhibition.ai.respond.ArtColorResponseDTO;
+import com.art.cheric.dto.exhibition.ai.request.ArtCloudRequestDTO;
+import com.art.cheric.dto.exhibition.ai.respond.ArtCloudResponseDTO;
 import com.art.cheric.dto.exhibition.ai.respond.ArtworkResponseDTO;
 import com.art.cheric.service.ai.cloud.ArtCloudService;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +25,10 @@ public class ArtCloudController {
     // 색상 추출 api
     @PostMapping("/color")
     public ResponseEntity<ArtworkResponseDTO> extractColors(
-            @RequestBody @Validated ArtColorRequestDTO request) {
+            @RequestBody @Validated ArtCloudRequestDTO request) {
 
         try {
-            List<ArtColorResponseDTO> attributes = artCloudService.extractColors(request.getArtIds());
+            List<ArtCloudResponseDTO> attributes = artCloudService.extractColors(request);
             ArtworkResponseDTO responseDTO = new ArtworkResponseDTO();
             responseDTO.setCode(HttpStatus.CREATED.value());
             responseDTO.setMessage("속성이 추출되었습니다.");
