@@ -68,6 +68,7 @@ public class Art extends BaseTime {
     @Comment("작품 사용 재료")
     private MaterialSort materialStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "register", nullable = false)
     @Comment("작품 등록")
     private Role register;
