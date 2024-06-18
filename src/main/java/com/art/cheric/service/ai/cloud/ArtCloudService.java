@@ -21,12 +21,11 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Service
 @Transactional
-
 public class ArtCloudService {
     private final ArtRepository artRepository;
 
     // 색상 추출
-    public List<ArtCloudResponseDTO> extractColors(ArtCloudRequestDTO artCloudRequestDTO, Feature.Type fetureType, int maxResult) throws Exception {
+    public List<ArtCloudResponseDTO> extractProperties(ArtCloudRequestDTO artCloudRequestDTO, Feature.Type fetureType, int maxResult) throws Exception {
         // 최종 응답을 담을 객체
         List<ArtCloudResponseDTO> artCloudResponseDTOS = new ArrayList<>();
 
