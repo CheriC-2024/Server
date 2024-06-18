@@ -1,4 +1,4 @@
-package com.art.cheric.controller.exthibition.ai.cloud;
+package com.art.cheric.controller.exhibition.ai.cloud;
 
 import com.art.cheric.constant.CloudRequestType;
 import com.art.cheric.dto.exhibition.ai.request.ArtCloudRequestDTO;
@@ -23,16 +23,16 @@ public class ArtCloudController {
 
     // 색상, 테마 추출 api
     @PostMapping
-    public ResponseEntity<ArtworkResponseDTO> extractColors(
+    public ResponseEntity<ArtworkResponseDTO> extractProperties(
             @RequestBody @Validated ArtCloudRequestDTO request) {
         ArtworkResponseDTO responseDTO = new ArtworkResponseDTO();
 
         try {
             List<ArtCloudResponseDTO> attributes;
             if (request.getCloudRequestType() == CloudRequestType.COLOR) {
-                attributes = artCloudService.extractColors(request, Feature.Type.IMAGE_PROPERTIES, 10);
+                attributes = artCloudService.extractProperties(request, Feature.Type.IMAGE_PROPERTIES, 10);
             } else {
-                attributes = artCloudService.extractColors(request, Feature.Type.LABEL_DETECTION, 5);
+                attributes = artCloudService.extractProperties(request, Feature.Type.LABEL_DETECTION, 5);
             }
             responseDTO.setCode(HttpStatus.CREATED.value());
             responseDTO.setMessage("속성이 추출되었습니다.");
