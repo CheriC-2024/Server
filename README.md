@@ -13,8 +13,8 @@
 7. 재부팅 후 run server
 
 ### 2. API Key & URL application.properties에 설정 필요
-- Chat GPT API KEY: `발급받은 API KEY`
-- CHAT GPT API URL: `https://api.openai.com/v1/chat/completions`
-- Musicgen API KEY: `발급받은 API KEY`
+- Chat GPT API KEY[`openai.api.key`]: `발급받은 API KEY`
+- CHAT GPT API URL[`openai.api.url`]: `https://api.openai.com/v1/chat/completions`
+- Musicgen API KEY[`replicate.api.token`]: `발급받은 API KEY`
 
 ### 3. application.properties에 파일 업로드 경로 자신의 경로로 설정
