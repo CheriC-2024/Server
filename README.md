@@ -1,7 +1,7 @@
 # Cheric-Server
 
 ## 구동을 위해 필요한 부분
-### google cloud Sdk 설정 필요
+### 1. google cloud Sdk 설정 필요
 1. google cloud platform 프로젝트 생성
 2. google cloud vision api 활성 상태로 설정
 3. API 및 서비스 > 사용자 인증 정보 > 서비스 계정 생성 > 키 생성(JSON)
@@ -12,9 +12,9 @@
 6. google cloud platform 계정과 연결
 7. 재부팅 후 run server
 
-### API Key & URL application.properties에 설정 필요
+### 2. API Key & URL application.properties에 설정 필요
 - Chat GPT API KEY: `발급받은 API KEY`
 - CHAT GPT API URL: `https://api.openai.com/v1/chat/completions`
 - Musicgen API KEY: `발급받은 API KEY`
 
-### application.properties에 파일 업로드 경로 자신의 경로로 설정
+### 3. application.properties에 파일 업로드 경로 자신의 경로로 설정
